@@ -1,0 +1,20 @@
+version: '3'
+services:
+  # docker run -d --name health --rm --link postgres -p 8000:8000 -p 8069:8069 opendx/gnu_health
+  health:
+    image: opendx/gnu_health
+    build:
+      context: .
+
+  # docker run -d --name postgres -e POSTGRES_USER=gnuhealth -e POSTGRES_PASSWORD=gnuhealth -p 5434:5432 postgres:15.2-alpine
+  postgres:
+    image: postgres:15.2-alpine
+    environment:
+      - POSTGRES_USER=gnuhealth
+      - POSTGRES_PASSWORD=gnuhealth
+      #- POSTGRES_HOST_AUTH_METHOD=trust
+      - PGDATA=/var/lib/postgresql/data/
+    volumes:
+      - ${VOLUMES_BASE_PATH:-./volumes}/pg:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
